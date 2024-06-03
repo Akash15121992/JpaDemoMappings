@@ -1,0 +1,99 @@
+Eager Loading:
+
+@Entity
+@Getter
+@Setter
+public class Brand extends BaseModel{
+    private String brandName;
+    @OneToMany(mappedBy = "brand",fetch = FetchType.EAGER)
+    private List<CarModel> models;
+}
+
+@Entity
+@Getter
+@Setter
+public class CarModel extends BaseModel{
+    private String modelName;
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+}
+
+
+Query:
+Hibernate: select b1_0.id,b1_0.brand_name,m1_0.brand_id,m1_0.id,m1_0.model_name from brand b1_0 left join car_model m1_0 on b1_0.id=m1_0.brand_id where b1_0.id=?
+
+select b.id,b.brand_name,m.brand_id,m.id,m.model_name
+from brand b left join car_model m
+on b.id=m.brand_id
+where b.id=?
+
+OutCome => Entire brand with the model data is getting fetched at one shot.
+
+########################################
+
+Lazy Loading:
+
+@Entity
+@Getter
+@Setter
+public class Brand extends BaseModel{
+    private String brandName;
+    //@OneToMany(mappedBy = "brand",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY)
+    private List<CarModel> models;
+}
+
+@Entity
+@Getter
+@Setter
+public class CarModel extends BaseModel{
+    private String modelName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+}
+
+Query:
+
+Hibernate: select b1_0.id,b1_0.brand_name from brand b1_0 where b1_0.id=?
+
+select b.id,b.brand_name from brand b where b.id=?
+
+Outcome => Only the Brand Data is loaded without the model data
+
+*******************************************************************
+
+Default if we do not mention the fetchType then
+
+for 1:1 => EAGER loading
+for 1:M and M:M => Lazy loading
+
+OutCome => Default for 1:M Here LAZY Loading:
+
+@Entity
+@Getter
+@Setter
+public class Brand extends BaseModel{
+    private String brandName;
+    //@OneToMany(mappedBy = "brand",fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "brand",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "brand")
+    private List<CarModel> models;
+}
+
+@Entity
+@Getter
+@Setter
+public class CarModel extends BaseModel{
+    private String modelName;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+}
+
+
+Hibernate: select b1_0.id,b1_0.brand_name from brand b1_0 where b1_0.id=?
+
+select b.id,b.brand_name from brand b where b.id=?

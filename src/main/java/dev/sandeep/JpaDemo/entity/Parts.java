@@ -11,10 +11,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Brand extends BaseModel{
-    private String brandName;
-    //@OneToMany(mappedBy = "brand",fetch = FetchType.EAGER)
+public class Parts extends BaseModel{
+
+    private String partsName;
     @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY)
-    //@OneToMany(mappedBy = "brand")
-    private List<CarModel> models;
+    private List<CarModel> modelList;
 }
