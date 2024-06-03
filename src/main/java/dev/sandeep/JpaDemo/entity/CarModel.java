@@ -15,6 +15,4 @@ public class CarModel extends BaseModel{
     //@ManyToOne
     @JoinColumn(name="brand_id")
     private Brand brand;
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Parts> partsList;
 }

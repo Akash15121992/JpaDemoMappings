@@ -97,3 +97,12 @@ public class CarModel extends BaseModel{
 Hibernate: select b1_0.id,b1_0.brand_name from brand b1_0 where b1_0.id=?
 
 select b.id,b.brand_name from brand b where b.id=?
+
+*******************************************************
+
+Default 1:1 mapping Eager Loading Example
+
+Hibernate: select t1_0.id,td1_0.id,td1_0.team_details,t1_0.team_name from team t1_0 left join team_details td1_0 on t1_0.id=td1_0.team_id where t1_0.id=?
+
+Hibernate: select t.id,td.id,td.team_details,t.team_name from team
+t left join team_details td on t.id=td.team_id where t.id=?
