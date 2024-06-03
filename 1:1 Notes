@@ -1,0 +1,90 @@
+1:1
+
+* 1 way mapping - no extra annotation
+
+@Entity
+public class Team extends BaseModel{
+    private String teamName;
+    @OneToOne
+    private TeamDetails teamDetails;
+}
+
+@Entity
+public class TeamDetails extends BaseModel{
+    private String teamDetails;
+
+}
+
+output -> Team and TeamDetails table got created.Team table has Foreign Key called team_details .
+Non Desired Output
+
+* 2 way mapping - no extra annotation
+
+@Entity
+public class Team extends BaseModel{
+    private String teamName;
+    @OneToOne
+    private TeamDetails teamDetails;
+}
+
+@Entity
+public class TeamDetails extends BaseModel{
+    private String teamDetails;
+    @OneToOne
+        private Team team;
+
+}
+output -> Team and TeamDetails table got created . Team table had Foreign Key called team_details
+and TeamDetails table had Foreign Key called team_id.
+
+Non Desired output.
+
+* 1 way mapping - no extra annotation
+
+@Entity
+public class Team extends BaseModel{
+    private String teamName;
+
+}
+
+@Entity
+public class TeamDetails extends BaseModel{
+    private String teamDetails;
+    @OneToOne
+    private Team team;
+}
+
+output -> Team and TeamDetails table got created . In team table there is no Foreign Key and in
+TeamDetails table team_id is present as Foreign key .
+
+Desired Output for 1:1 , one way mapping with no extra annotation.
+
+* 2 way mapping with - mappedBy and JoinColumn annotation
+
+@Entity
+public class Team extends BaseModel{
+    private String teamName;
+    @OneToOne(mappedBy = "team")
+    private TeamDetails teamDetails;
+}
+
+***** Note
+1.mappedBy is put on the attribute that is owned by other attribute in 2 way mapping.
+Here teamDetails is being owned by team so we put mapped by on top of teamDetails in Team class.
+
+2. IN the TeamDetails class the attribute which we want as foreign key we put @JoinColumn at top
+of that attribute i.e team_id is the foreign key present in the teamDetails table.
+
+
+@Entity
+public class TeamDetails extends BaseModel{
+    private String teamDetails;
+    @OneToOne
+    @JoinColumn(name="team_id")
+    private Team team;
+}
+
+output -> Team and TeamDetails table got created . In team table there is no Foreign Key and in
+TeamDetails table team_id is present as Foreign key .
+
+Desired Output for 1:1 , 2 way mapping with mappedBy and JoinColumn annotation .

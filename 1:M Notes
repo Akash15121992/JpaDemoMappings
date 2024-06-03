@@ -1,0 +1,78 @@
+1:M
+* 1 Way mapping - no extra annotations
+
+@Entity
+public class Brand extends BaseModel{
+    private String brandName;
+    @OneToMany
+    private List<CarModel> models;
+}
+
+@Entity
+public class CarModel extends BaseModel{
+    private String modelName;
+}
+
+Outcome => Car_Model , Brand and a M:M table called Brand_model got created => Non Desired result
+
+
+* 2 Way Mapping - no extra annotation
+
+@Entity
+public class Brand extends BaseModel{
+    private String brandName;
+    @OneToMany
+    private List<CarModel> models;
+}
+
+@Entity
+public class CarModel extends BaseModel{
+    private String modelName;
+    @ManyToOne
+    private Brand brand;
+}
+
+Outcome =>Car_Model table had a foreign key created called brand_id of brand table,
+          Brand and a M:M table called Brand_model got created => Non Desired result
+
+
+* 1 Way mapping - no extra annotations
+
+@Entity
+public class Brand extends BaseModel{
+    private String brandName;
+
+}
+
+@Entity
+public class CarModel extends BaseModel{
+    private String modelName;
+}
+
+Outcome => Car_Model table got created with foreign key brand_id of Brand table,
+           Brand table got created and no extra Brand_Model mapping table got created. => DESIRED RESULT
+
+
+ * 2 Way Mapping - MappedBy And JoinColumn Annotation
+
+ @Entity
+ public class Brand extends BaseModel{
+     private String brandName;
+     @OneToMany
+     private List<CarModel> models;
+ }
+
+*********** Note:
+
+Mapped by is put on the entity which we are owning and
+Join Column on the side where we want the foreign key.
+
+ @Entity
+ public class CarModel extends BaseModel{
+     private String modelName;
+     @ManyToOne
+     private Brand brand;
+ }
+
+ Outcome => Car_Model table got created with foreign key brand_id of Brand table,
+            Brand table got created and no extra Brand_Model mapping table got created. => DESIRED RESULT

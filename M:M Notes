@@ -1,0 +1,57 @@
+M:M
+*  1 Way mapping => No annotations
+
+@Entity
+public class Person extends BaseModel{
+    private String personName;
+    @ManyToMany
+    private List<Course> courses;
+}
+
+@Entity
+public class Course extends BaseModel{
+    private String courseName;
+}
+
+Outcome => Person table and Course table got created along with a mapping table named person_courses
+           and no foreign keys on either Person Table or Course table. => DESIRED Result.
+
+
+* 2 Way Mapping => No Annotations
+
+@Entity
+public class Person extends BaseModel{
+    private String personName;
+    @ManyToMany
+    private List<Course> courses;
+}
+
+@Entity
+public class Course extends BaseModel{
+    private String courseName;
+    @ManyToMany
+    private List<Person> people;
+}
+
+Outcome => Person table and Course table got created along with two mapping table named person_courses and course_people
+           and no foreign keys on either Person Table or Course table. => NON Desired Result.
+
+* 2 Way Mapping => MappedBy annotation
+In M:M there is no concept of foreign key ,hence @JoinColumn annotation is not required
+
+@Entity
+public class Person extends BaseModel{
+    private String personName;
+    @ManyToMany(mappedBy = )
+    private List<Course> courses;
+}
+
+@Entity
+public class Course extends BaseModel{
+    private String courseName;
+    @ManyToMany
+    private List<Person> people;
+}
+
+Outcome => Person table and Course table got created along with one mapping table named  course_people
+           and no foreign keys on either Person Table or Course table. =>  DESIRED Result.
